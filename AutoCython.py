@@ -235,14 +235,25 @@ class AutoCython():
                     cython_popen, file_path = task.result()
                     if cython_popen.wait():
                         # 编译错误
-                        _, file_name = os.path.split(file_path)
-                        self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path)
+                        try:
+                            _, file_name = os.path.split(file_path)
+                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path)
+                        except Exception as err:
+                            print("\033[0;37;41m任务信息记录失败!\033[0m")
+                            traceback.print_exc()
+                            print(err)
                         print('Info : \033[0;37;41merr\033[0m  path : ', file_path)
                     else:
                         # 编译正确
-                        _, file_name = os.path.split(file_path)
-                        self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path)
-                        Popen_out(cython_popen, file_path, file_path[0:-2]+'pyd')
+                        try:
+                            path, file_name = os.path.split(file_path)
+                            pyd_name = list(filter(lambda name : name.split('.')[-1] == 'pyd' and name.split('.')[0] == file_name[:-3], os.listdir(path)))[0]
+                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path, os.path.join(path, pyd_name))
+                        except Exception as err:
+                            print("\033[0;37;41m任务信息记录失败!\033[0m")
+                            print(file_path)
+                            traceback.print_exc()
+                            print(err)
                         print('Info :  \033[0;37;44mok\033[0m  path : ', file_path, ' -> ', file_path[0:-2]+'pyd')
                 print("complete!")
                 # 全部结束后清理build文件夹
@@ -269,7 +280,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.0.0'
+        self.version = 'AutoCython V1.0.1'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
@@ -278,7 +289,7 @@ class AC_getopt_argv():
                         "  -c -C --compile             Compile and assemble all .py files under the path.\n"+
                         "  -e -E --exclude             Excluded .py files or all .py files in a path, Used ';' split file or path.\n"+
                         "  -m -M --mode                Compile mode of 'f'(fast) used all CPU core, 'n'(normal) only used one CPU core,\n"+
-                        "                                    or used a nomber eg '4' of used CPU core what you want.\n"+
+                        "                                    or used a number eg '4' of used CPU core what you want.\n"+
                         "  -d -D --delete              Select to delete the file generated after compilation\n"+
                         "                                    b : The build path\n"+
                         "                                    p : The setup_file\n"+
