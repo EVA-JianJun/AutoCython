@@ -143,9 +143,9 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
     python AutoCython.py -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
 
-除了AutoCython.py外我在 **releases** 中也提供了exe ![此处输入图片的描述][7]可以直接在win下使用。
+除了AutoCython.py外我在 **[releases][7]** 中也提供了exe ![此处输入图片的描述][8]可以直接在win下使用。
 
-![此处输入图片的描述][8]
+![此处输入图片的描述][9]
 
 
   [1]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
@@ -154,5 +154,6 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
   [4]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgn5gvvt5j20h1028wev
   [5]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgn5h9jihj20en02aq38
   [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fzgnbzactvj21740prnpd.jpg
-  [7]: https://ws1.sinaimg.cn/large/8253c4ddly1fzhe1p3xrij203n03mq30.jpg
-  [8]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
+  [7]: https://github.com/EVA-JianJun/AutoCython/releases
+  [8]: https://ws1.sinaimg.cn/large/8253c4ddly1fzhe1p3xrij203n03mq30.jpg
+  [9]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
