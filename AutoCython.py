@@ -95,21 +95,23 @@ class AutoCython():
         """ 让一个路径的分隔符统一为当前系统下的 """
         return path.replace('/', self._sp).replace('\\', self._sp).rstrip(self._sp)
 
-    def _get_all_file_list(self, path='.', file_type=[]) -> list:
-        """ 获取某个目录下的某文件路径列表 """
+    def _get_all_file_list(self, path='.', file_type=[], file_name=[]) -> list:
+        """ 获取某个目录下的某类文件或某文件名路径列表 """
         all_file = list()
         try:
             for file in os.listdir(path):
                 file_path = os.path.join(path, file)
                 if os.path.isfile(file_path):
-                    if file_type:
+                    if file_type or file_name:
                         _, filename  = os.path.split(file_path)
                         if filename.split('.')[-1] in file_type and file.find('AutoCython') == -1:
+                            all_file.append(file_path)
+                        if filename in file_name:
                             all_file.append(file_path)
                     else:
                         all_file.append(file_path)
                 elif os.path.isdir(file_path):
-                    all_file.extend(self._get_all_file_list(file_path, file_type))
+                    all_file.extend(self._get_all_file_list(file_path, file_type, file_name))
         except FileNotFoundError:
             pass
         finally:
@@ -209,8 +211,20 @@ class AutoCython():
             try:
                 if not delete:
                     delete = self.delete
+
+                # 重命名所有__init__.py文件,这个文件存在生成的pyd会跑到二级目录
+                self.re_init_file_dict = dict()
+                for init_file_path in self._get_all_file_list(file_name=['__init__.py']):
+                    # 重命名为___init__.py
+                    path, name = os.path.split(init_file_path)
+                    new_name = '_' + name
+                    new_file_path = os.path.join(path, new_name)
+                    self.re_init_file_dict[init_file_path] = new_file_path
+                    os.rename(init_file_path, new_file_path)
+
                 # 获取所有的py文件
                 py_file_path_iter = map(self._fitter_path, self._get_all_file_list(self.compile_path, ['py']))
+                self.exclude_file_list.extend(['__init__.py','___init__.py'])
                 # 剔除不需要编译的文件
                 py_file_path_iter = filter(lambda file_path : file_path not in self.exclude_file_list, py_file_path_iter)
                 # 剔除全部只标注了文件名的文件
@@ -242,23 +256,29 @@ class AutoCython():
                             print("\033[0;37;41m任务信息记录失败!\033[0m")
                             traceback.print_exc()
                             print(err)
-                        print('Info : \033[0;37;41merr\033[0m  path : ', file_path)
+                        else:
+                            print('Info : \033[0;37;41merr\033[0m  path : ', file_path)
                     else:
                         # 编译正确
                         try:
                             path, file_name = os.path.split(file_path)
                             pyd_name = list(filter(lambda name : name.split('.')[-1] == 'pyd' and name.split('.')[0] == file_name[:-3], os.listdir(path)))[0]
-                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path, os.path.join(path, pyd_name))
+                            pyd_path = os.path.join(path, pyd_name)
+                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path, pyd_path)
                         except Exception as err:
                             print("\033[0;37;41m任务信息记录失败!\033[0m")
                             print(file_path)
                             traceback.print_exc()
                             print(err)
-                        print('Info :  \033[0;37;44mok\033[0m  path : ', file_path, ' -> ', file_path[0:-2]+'pyd')
-                print("complete!")
+                        else:
+                            print('Info :  \033[0;37;44mok\033[0m  path : ', file_path, ' -> ', pyd_path)
                 # 全部结束后清理build文件夹
                 for rm_path in self._get_all_path_list(self.compile_path, file_type=['build']):
                     shutil.rmtree(rm_path)
+                # 逆向重命名
+                for old_file, new_file in self.re_init_file_dict.items():
+                    os.rename(new_file, old_file)
+                print("complete!")
             finally:
                 self.compile_lock.release()
 
@@ -280,7 +300,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.0.1'
+        self.version = 'AutoCython V1.1.0'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
