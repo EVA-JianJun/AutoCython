@@ -145,39 +145,54 @@ class AutoCython():
             exit_code = cython_popen.wait()
 
             for file_code in delete:
-                if file_code in ('build', 'b'):
-                    if not complicating:
-                        # 不是并发式,直接删除build编译临时文件夹
-                        # 是并发的情况下会在所有任务完成后统一删除build文件夹
-                        shutil.rmtree(os.path.join(dirname, 'build'))
-                elif file_code in ('py','.py','p'):
-                    # 删除编译产生的setup_file
-                    os.remove(os.path.join(dirname, setup_file))
-                elif file_code in ('c',):
-                    # 删除编译产生的C代码
-                    os.remove(os.path.join(dirname, filename[:-3] + '.c'))
-                elif file_code in ('s',):
-                    # 删除源source py源文件
-                    if exit_code == 0:
-                        # 正常退出的情况下才删除
-                        os.remove(os.path.join(dirname, filename))
-                elif file_code in ('all', 'ALL', 'A'):
-                    # 删除除编译好的pyd文件外的所有文件
-                    if complicating:
-                        filename_name = filename[:-3]
-                        for file in self._get_all_file_list(os.path.join(dirname, 'build')):
-                            if filename_name in file:
-                                try:
-                                    os.remove(file)
-                                except PermissionError:
-                                    pass
-                    else:
-                        shutil.rmtree(os.path.join(dirname, 'build'))
-                    os.remove(os.path.join(dirname, setup_file))
-                    os.remove(os.path.join(dirname, filename[:-3] + '.c'))
-                    if exit_code == 0:
-                        os.remove(os.path.join(dirname, filename))
-                    break
+                try:
+                    if file_code in ('build', 'b'):
+                        if not complicating:
+                            # 不是并发式,直接删除build编译临时文件夹
+                            # 是并发的情况下会在所有任务完成后统一删除build文件夹
+                            shutil.rmtree(os.path.join(dirname, 'build'))
+                    elif file_code in ('py','.py','p'):
+                        # 删除编译产生的setup_file
+                        os.remove(os.path.join(dirname, setup_file))
+                    elif file_code in ('c',):
+                        # 删除编译产生的C代码
+                        os.remove(os.path.join(dirname, filename[:-3] + '.c'))
+                    elif file_code in ('s',):
+                        # 删除源source py源文件
+                        if exit_code == 0:
+                            # 正常退出的情况下才删除
+                            os.remove(os.path.join(dirname, filename))
+                    elif file_code in ('all', 'ALL', 'A'):
+                        # 删除除编译好的pyd文件外的所有文件
+                        if complicating:
+                            filename_name = filename[:-3]
+                            for file in self._get_all_file_list(os.path.join(dirname, 'build')):
+                                if filename_name in file:
+                                    try:
+                                        os.remove(file)
+                                    except PermissionError:
+                                        pass
+                        else:
+                            try:
+                                shutil.rmtree(os.path.join(dirname, 'build'))
+                            except FileNotFoundError:
+                                pass
+                        try:
+                            os.remove(os.path.join(dirname, setup_file))
+                        except FileNotFoundError:
+                            pass
+                        try:
+                            os.remove(os.path.join(dirname, filename[:-3] + '.c'))
+                        except FileNotFoundError:
+                            pass
+                        if exit_code == 0:
+                            try:
+                                os.remove(os.path.join(dirname, filename))
+                            except FileNotFoundError:
+                                pass
+                        break
+                except FileNotFoundError:
+                    pass
 
         try:
             dirname, filename = os.path.split(file_path)
@@ -195,7 +210,16 @@ class AutoCython():
             if wait:
                 cython_popen.wait()
 
+            if not complicating and cython_popen.wait() != 0:
+                # 错误是输出
+                err_po = Popen_out(cython_popen, file_path)
+                print('\033[0;37;41m'+file_path, ':\033[0m')
+                print(err_po.out)
+                print(err_po.err)
+                print()
+
             return cython_popen, file_path
+
         except Exception as err:
             print('\033[0;37;41m', file_path, "编译运行失败!\033[0m")
             traceback.print_exc()
@@ -288,6 +312,7 @@ class AutoCython():
                 if log:
                     for err_file_name, err_po in err_task_dict.items():
                         print('\033[0;37;41m'+err_file_name, ':\033[0m')
+                        print("path : ", err_po.PyPath)
                         print(err_po.out)
                         print(err_po.err)
                         print()
@@ -312,7 +337,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.0'
+        self.version = 'AutoCython V1.2.1'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
