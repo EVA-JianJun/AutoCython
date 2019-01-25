@@ -142,26 +142,37 @@ class AutoCython():
         # complicating : 本函数是否是并发运行,如果是的话要特殊处理build文件夹
         def delete_tmp_file(cython_popen, dirname, filename, setup_file, delete, complicating) -> None:
             """ 清理编译后残留的文件 """
-            exit_code = cython_popen.wait()
+            def rmtree(path, name):
+                try:
+                    shutil.rmtree(os.path.join(path, name))
+                except (FileNotFoundError,PermissionError):
+                    pass
 
+            def remove(path, name):
+                try:
+                    os.remove(os.path.join(path, name))
+                except (FileNotFoundError,PermissionError):
+                    pass
+
+            exit_code = cython_popen.wait()
             for file_code in delete:
                 try:
                     if file_code in ('build', 'b'):
                         if not complicating:
                             # 不是并发式,直接删除build编译临时文件夹
                             # 是并发的情况下会在所有任务完成后统一删除build文件夹
-                            shutil.rmtree(os.path.join(dirname, 'build'))
+                            rmtree(dirname, 'build')
                     elif file_code in ('py','.py','p'):
                         # 删除编译产生的setup_file
-                        os.remove(os.path.join(dirname, setup_file))
+                        remove(dirname, setup_file)
                     elif file_code in ('c',):
                         # 删除编译产生的C代码
-                        os.remove(os.path.join(dirname, filename[:-3] + '.c'))
+                        remove(dirname, filename[:-3] + '.c')
                     elif file_code in ('s',):
                         # 删除源source py源文件
                         if exit_code == 0:
                             # 正常退出的情况下才删除
-                            os.remove(os.path.join(dirname, filename))
+                            remove(dirname, filename)
                     elif file_code in ('all', 'ALL', 'A'):
                         # 删除除编译好的pyd文件外的所有文件
                         if complicating:
@@ -173,23 +184,14 @@ class AutoCython():
                                     except PermissionError:
                                         pass
                         else:
-                            try:
-                                shutil.rmtree(os.path.join(dirname, 'build'))
-                            except FileNotFoundError:
-                                pass
-                        try:
-                            os.remove(os.path.join(dirname, setup_file))
-                        except FileNotFoundError:
-                            pass
-                        try:
-                            os.remove(os.path.join(dirname, filename[:-3] + '.c'))
-                        except FileNotFoundError:
-                            pass
+                            rmtree(dirname, 'build')
+
+                        remove(dirname, setup_file)
+                        remove(dirname, filename[:-3] + '.c')
+
                         if exit_code == 0:
-                            try:
-                                os.remove(os.path.join(dirname, filename))
-                            except FileNotFoundError:
-                                pass
+                            remove(dirname, filename)
+
                         break
                 except FileNotFoundError:
                     pass
