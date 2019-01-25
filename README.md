@@ -8,6 +8,8 @@ AutoCython
 
     from AutoCython import AutoCython
     AutoCython().compile()
+    
+![AutoCython][1]
 
 * **全自动**：自动编译当前目录下所有.py文件，支持指定目录编译或单文件编译；
 * **个性化**：支持指定排除目录或排除文件跳过编译；
@@ -79,55 +81,38 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
 ### 错误处理
 在这个目录下：
-![此处输入图片的描述][1]
-
-目录为：
-
-    .
-    ├── 123
-    │   ├── 新建 Microsoft PowerPoint 演示文稿.pptx
-    │   └── 新建文本文档.py
-    └── build_test
-        ├── 321
-        │   └── test3.py
-        ├── test1
-        │   ├── test.py
-        │   ├── test2.py
-        │   └── test3.py
-        ├── test2.py
-        ├── test3.py
-        ├── 新建 Microsoft Word 文档.docx
-        ├── 新建 zip Archive.zip
-        └── 新建文本文档.py
-
+![文件目录][2]
 
 运行如下代码只编译目录 build_test\ 下的.py文件;
 
     from AutoCython import AutoCython
     ac = AutoCython('./build_test/')
+    ac.compile()
 
-![此处输入图片的描述][2]
+**程序默认会打印出错误文件的错误日志**
+![错误编译][3]
 
-可以看到 .\build_test\新建文本文档.py 和 .\build_test\test1\test2.py 发生错误，怎么查看错误信息？
-在ipython下直接打.ac按TAB，调出compile_result：
-![此处输入图片的描述][3]
+可以看到 .\build_test\新建文本文档.py 和 .\build_test\test1\test2.py 发生错误，如何手动查看错误信息？
+在ipython下直接打.ac按TAB，选择 **compile_result**：
+![compile_result][4]
 
-再按TAB：
+再按TAB，好了，这时候所有的编译任务都调出来了，错误的任务名称以 **ERR_** 开头，正确的以 **OK_** 开头：
+![错误任务][5]
 
-![此处输入图片的描述][4]
+选择编号为**2**，错误文件名为test2的任务：
 
-好了，这时候所有的编译任务都调出来了，选择错误的那两个，比如这里的新建文本文档.py：
-![此处输入图片的描述][5]
+![任务属性][6]
 
-其下的属性中其中err为错误输出；out为正常输出；base为任务Popen对象；ExitCode为编译退出时错误代码，与系统保持一致；PyPath为源文件目录；PydPath为编译生成的pyd文件目录。
+其下的属性中其中 **err** 为错误输出；**out** 为正常输出；**base** 为任务Popen对象；**ExitCode** 为编译退出时错误代码，与系统保持一致；**PyPath** 为源文件目录；**PydPath** 为编译生成的pyd文件目录。
 
 
 **查看错误信息：**
-![此处输入图片的描述][6]
-可以看到**新建文本文档.py**为文件命名不符合规范，**test2.py**为使用了Cython不支持的函数功能print(end='')导致编译失败。
+![错误信息][7]
 
- - 解决的方法一是重新命名 新建文本文档.py ，让其文件名符合C命名规范;
+可以看到**test2.py**为使用了Cython不支持的函数功能print(end='')，**新建文本文档.py**为文件命名不符合规范，导致编译失败。
+
  - 对于print(end='')使用end参数不能编译通过，可以外部导入一个print_no_end.py文件,其中自定义end=''的函数，然后不编译这个print_no_end.py这个文件就好。
+ - 解决的方法一是重新命名 新建文本文档.py ，让其文件名符合C命名规范;
 
 至于其他遇到的问题怎么改，请查阅Cython的文档，这只是个轮子。重新编译错误文件可以使用compile_file函数单独编译。
 
@@ -143,17 +128,20 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
     python AutoCython.py -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
 
-除了AutoCython.py外我在 **[releases][7]** 中也提供了exe ![此处输入图片的描述][8]可以直接在win下使用。
+除了AutoCython.py外我在 **[releases][8]** 中也提供了exe程序 ![exe图标][9]可以直接在win下使用：
 
-![此处输入图片的描述][9]
+    AutoCython build_test
+
+![命令行][10]
 
 
-  [1]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
-  [2]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgmyy53cuj21740prkjl.jpg
-  [3]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgn5gh4wqj20k60200t5
-  [4]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgn5gvvt5j20h1028wev
-  [5]: https://ws3.sinaimg.cn/large/8253c4ddly1fzgn5h9jihj20en02aq38
-  [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fzgnbzactvj21740prnpd.jpg
-  [7]: https://github.com/EVA-JianJun/AutoCython/releases
-  [8]: https://ws1.sinaimg.cn/large/8253c4ddly1fzhe1p3xrij203n03mq30.jpg
-  [9]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
+  [1]: https://ws2.sinaimg.cn/large/8253c4ddly1fziy5tgpw2j21740pr7wh.jpg
+  [2]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
+  [3]: https://ws2.sinaimg.cn/large/8253c4ddly1fzixse4vw9j21740prb29.jpg
+  [4]: https://ws4.sinaimg.cn/large/8253c4ddly1fziyae76u4j20jy02iq4d.jpg
+  [5]: https://ws2.sinaimg.cn/large/8253c4ddly1fziybwsx9oj20je02iq4f.jpg
+  [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyeaaqosj20e002imy5.jpg
+  [7]: https://ws2.sinaimg.cn/large/8253c4ddly1fziygp52y3j21740prb29.jpg
+  [8]: https://github.com/EVA-JianJun/AutoCython/releases
+  [9]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyi8nmofj203c03cq32.jpg
+  [10]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
