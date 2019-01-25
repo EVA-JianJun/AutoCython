@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import time
 import getopt
 import shutil
 import platform
@@ -201,7 +202,7 @@ class AutoCython():
             print(err)
             return None
 
-    def compile(self, wait=True, delete=[]) -> None:
+    def compile(self, wait=True, delete=[], log=True) -> None:
         """ 编译所有文件 """
         def compile_th(delete):
             if self.compile_lock.locked():
@@ -209,6 +210,7 @@ class AutoCython():
 
             self.compile_lock.acquire()
             try:
+                st = time.time()
                 if not delete:
                     delete = self.delete
 
@@ -234,9 +236,10 @@ class AutoCython():
                 py_file_path_list = list(filter(lambda py_file_path : not any([exclude_path in py_file_path for exclude_path in self.exclude_path_list]), py_file_path_iter))
 
                 self.compile_result = Container()
+                err_task_dict = dict()
                 task_index_dict = dict()
                 print("Initialize compilation information")
-                for i in range(len(py_file_path_list)) : print(i, ' path :', py_file_path_list[i]); task_index_dict[py_file_path_list[i]] = str(i)
+                for i in range(len(py_file_path_list)) : print('{0:<4} path : {1}'.format(i, py_file_path_list[i])); task_index_dict[py_file_path_list[i]] = str(i)
                 print("Compiling...")
                 # 创建线程池
                 pool = ThreadPoolExecutor(self._cpu_core_count)
@@ -251,34 +254,43 @@ class AutoCython():
                         # 编译错误
                         try:
                             _, file_name = os.path.split(file_path)
-                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path)
+                            po = Popen_out(cython_popen, file_path)
+                            self.compile_result['ERR_' + task_index_dict[file_path] + '_' +file_name[:-3]] = po
+                            err_task_dict['ERR_' + task_index_dict[file_path] + '_' +file_name[:-3]] = po
                         except Exception as err:
                             print("\033[0;37;41m任务信息记录失败!\033[0m")
                             traceback.print_exc()
                             print(err)
                         else:
-                            print('Info : \033[0;37;41merr\033[0m  path : ', file_path)
+                            print('{0:<4} Info : \033[0;37;41mERR\033[0m  path : {1}'.format(task_index_dict[file_path], file_path))
                     else:
                         # 编译正确
                         try:
                             path, file_name = os.path.split(file_path)
                             pyd_name = list(filter(lambda name : name.split('.')[-1] == 'pyd' and name.split('.')[0] == file_name[:-3], os.listdir(path)))[0]
                             pyd_path = os.path.join(path, pyd_name)
-                            self.compile_result[file_name[:-3] + '_' + task_index_dict[file_path]] = Popen_out(cython_popen, file_path, pyd_path)
+                            self.compile_result['OK_' + task_index_dict[file_path] + '_' + file_name[:-3]] = Popen_out(cython_popen, file_path, pyd_path)
                         except Exception as err:
                             print("\033[0;37;41m任务信息记录失败!\033[0m")
                             print(file_path)
                             traceback.print_exc()
                             print(err)
                         else:
-                            print('Info :  \033[0;37;44mok\033[0m  path : ', file_path, ' -> ', pyd_path)
+                            print('{0:<4} Info : \033[0;37;44m OK\033[0m  path : {1} -> {2}'.format(task_index_dict[file_path], file_path, pyd_path))
                 # 全部结束后清理build文件夹
-                for rm_path in self._get_all_path_list(self.compile_path, file_type=['build']):
+                for rm_path in self._get_all_path_list(self.compile_path, file_type=['build', '__pycache__']):
                     shutil.rmtree(rm_path)
                 # 逆向重命名
                 for old_file, new_file in self.re_init_file_dict.items():
                     os.rename(new_file, old_file)
-                print("complete!")
+                print("time cost : ", time.time() - st)
+                print("complete!\n")
+                if log:
+                    for err_file_name, err_po in err_task_dict.items():
+                        print('\033[0;37;41m'+err_file_name, ':\033[0m')
+                        print(err_po.out)
+                        print(err_po.err)
+                        print()
             finally:
                 self.compile_lock.release()
 
@@ -300,7 +312,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.1.0'
+        self.version = 'AutoCython V1.2.0'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
