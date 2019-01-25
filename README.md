@@ -1,15 +1,15 @@
 AutoCython
 ==================
-
 **使用Cython批量编译.py文件为.pyd文件！**
+![py_pyd][1]
 
 这是一个轮子，让你更加快速的把.py调教为.pyd！
-大多数情况下,你只需要这样就可以很快的调教！
+大多数情况下，你只需要这样就可以很快的调教！
 
     from AutoCython import AutoCython
     AutoCython().compile()
-    
-![AutoCython][1]
+
+![AutoCython][2]
 
 * **全自动**：自动编译当前目录下所有.py文件，支持指定目录编译或单文件编译；
 * **个性化**：支持指定排除目录或排除文件跳过编译；
@@ -77,11 +77,11 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
     ac = AutoCython(compile_path='D:/python_code/ProjectPath', exclude=['tmp.py','./ProjectPath/print_cy.py','./ProjectPath/data/tmp'], mode='8', delete=['b', 'p'])
     ac.compile()
 
-AutoCython类里compile和compile_file函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等功能。
+AutoCython类里compile和compile_file函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等。
 
 ### 错误处理
 在这个目录下：
-![文件目录][2]
+![文件目录][3]
 
 运行如下代码只编译目录 build_test\ 下的.py文件;
 
@@ -90,28 +90,28 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
     ac.compile()
 
 **程序默认会打印出错误文件的错误日志**
-![错误编译][3]
+![错误编译][4]
 
 可以看到 .\build_test\新建文本文档.py 和 .\build_test\test1\test2.py 发生错误，如何手动查看错误信息？
 在ipython下直接打.ac按TAB，选择 **compile_result**：
-![compile_result][4]
+![compile_result][5]
 
 再按TAB，好了，这时候所有的编译任务都调出来了，错误的任务名称以 **ERR_** 开头，正确的以 **OK_** 开头：
-![错误任务][5]
+![错误任务][6]
 
 选择编号为**2**，错误文件名为test2的任务：
 
-![任务属性][6]
+![任务属性][7]
 
 其下的属性中其中 **err** 为错误输出；**out** 为正常输出；**base** 为任务Popen对象；**ExitCode** 为编译退出时错误代码，与系统保持一致；**PyPath** 为源文件目录；**PydPath** 为编译生成的pyd文件目录。
 
 
 **查看错误信息：**
-![错误信息][7]
+![错误信息][8]
 
 可以看到**test2.py**为使用了Cython不支持的函数功能print(end='')，**新建文本文档.py**为文件命名不符合规范，导致编译失败。
 
- - 对于print(end='')使用end参数不能编译通过，可以外部导入一个print_no_end.py文件,其中自定义end=''的函数，然后不编译这个print_no_end.py这个文件就好。
+ - 对于print(end='')使用end参数不能编译通过，可以外部导入一个print_no_end.py文件，其中自定义end=''的函数，然后不编译这个print_no_end.py这个文件就好。
  - 解决的方法一是重新命名 新建文本文档.py ，让其文件名符合C命名规范;
 
 至于其他遇到的问题怎么改，请查阅Cython的文档，这只是个轮子。重新编译错误文件可以使用compile_file函数单独编译。
@@ -128,20 +128,21 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
     python AutoCython.py -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
 
-除了AutoCython.py外我在 **[releases][8]** 中也提供了exe程序 ![exe图标][9]可以直接在win下使用：
+除了AutoCython.py外我在 **[releases][9]** 中也提供了exe程序 ![exe图标][10]可以直接在win下使用：
 
     AutoCython build_test
 
-![命令行][10]
+![命令行][11]
 
 
-  [1]: https://ws2.sinaimg.cn/large/8253c4ddly1fziy5tgpw2j21740pr7wh.jpg
-  [2]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
-  [3]: https://ws2.sinaimg.cn/large/8253c4ddly1fzixse4vw9j21740prb29.jpg
-  [4]: https://ws4.sinaimg.cn/large/8253c4ddly1fziyae76u4j20jy02iq4d.jpg
-  [5]: https://ws2.sinaimg.cn/large/8253c4ddly1fziybwsx9oj20je02iq4f.jpg
-  [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyeaaqosj20e002imy5.jpg
-  [7]: https://ws2.sinaimg.cn/large/8253c4ddly1fziygp52y3j21740prb29.jpg
-  [8]: https://github.com/EVA-JianJun/AutoCython/releases
-  [9]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyi8nmofj203c03cq32.jpg
-  [10]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
+  [1]: https://ws3.sinaimg.cn/large/8253c4ddly1fzj3wzhaeaj20xc0njav8.jpg
+  [2]: https://ws2.sinaimg.cn/large/8253c4ddly1fziy5tgpw2j21740pr7wh.jpg
+  [3]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
+  [4]: https://ws2.sinaimg.cn/large/8253c4ddly1fzixse4vw9j21740prb29.jpg
+  [5]: https://ws4.sinaimg.cn/large/8253c4ddly1fziyae76u4j20jy02iq4d.jpg
+  [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fziybwsx9oj20je02iq4f.jpg
+  [7]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyeaaqosj20e002imy5.jpg
+  [8]: https://ws2.sinaimg.cn/large/8253c4ddly1fziygp52y3j21740prb29.jpg
+  [9]: https://github.com/EVA-JianJun/AutoCython/releases
+  [10]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyi8nmofj203c03cq32.jpg
+  [11]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
