@@ -57,20 +57,22 @@ class AutoCython():
         """
 
         # 锁
-        self.compile_lock = Lock()
+        self._compile_lock = Lock()
         # 根据系统的不同获取不同路径分隔符
         self._sp = os.path.join('a','a')[1:-1]
 
         # 需要编译的目录
         self.compile_path = self._fitter_path(compile_path)
+        self.exclude = exclude
         # 需要排除的文件,写全路径就是绝对指定文件,只写文件名就同名文件全部不编译
-        self.exclude_file_list = list(map(self._fitter_path, [ex for ex in exclude if ex[-3:] == '.py']))
+        self._exclude_file_list = list(map(self._fitter_path, [ex for ex in exclude if ex[-3:] == '.py']))
         # 需要排除的目录
-        self.exclude_path_list = list(map(self._fitter_path, [ex for ex in exclude if ex[-3:] != '.py']))
+        self._exclude_path_list = list(map(self._fitter_path, [ex for ex in exclude if ex[-3:] != '.py']))
 
         # 接收结果的字典
         self.compile_result = Container()
 
+        self.mode = mode
         # 编译时使用的cpu核数
         if mode in ('f', 'fast'):
             # cpu核数
@@ -231,35 +233,35 @@ class AutoCython():
     def compile(self, wait=True, delete=[], log=True) -> None:
         """ 编译所有文件 """
         def compile_th(delete):
-            if self.compile_lock.locked():
+            if self._compile_lock.locked():
                 print("Waiting for the end of the previous task")
 
-            self.compile_lock.acquire()
+            self._compile_lock.acquire()
             try:
                 st = time.time()
                 if not delete:
                     delete = self.delete
 
                 # 重命名所有__init__.py文件,这个文件存在生成的pyd会跑到二级目录
-                self.re_init_file_dict = dict()
+                self._re_init_file_dict = dict()
                 for init_file_path in self._get_all_file_list(file_name=['__init__.py']):
                     # 重命名为___init__.py
                     path, name = os.path.split(init_file_path)
                     new_name = '_' + name
                     new_file_path = os.path.join(path, new_name)
-                    self.re_init_file_dict[init_file_path] = new_file_path
+                    self._re_init_file_dict[init_file_path] = new_file_path
                     os.rename(init_file_path, new_file_path)
 
                 # 获取所有的py文件
                 py_file_path_iter = map(self._fitter_path, self._get_all_file_list(self.compile_path, ['py']))
-                self.exclude_file_list.extend(['__init__.py','___init__.py'])
+                self._exclude_file_list.extend(['__init__.py','___init__.py'])
                 # 剔除不需要编译的文件
-                py_file_path_iter = filter(lambda file_path : file_path not in self.exclude_file_list, py_file_path_iter)
+                py_file_path_iter = filter(lambda file_path : file_path not in self._exclude_file_list, py_file_path_iter)
                 # 剔除全部只标注了文件名的文件
-                # exclude_file_absolute_set = set(filter(lambda file_path : file_path.find(self._sp) == -1 and file_path.split('.')[-1] == 'py', self.exclude_file_list))
-                py_file_path_iter = filter(lambda py_file_path : not bool(set(filter(lambda file_path : file_path.find(self._sp) == -1 and file_path.split('.')[-1] == 'py', self.exclude_file_list)) & set(py_file_path.split(self._sp))), py_file_path_iter)
+                # exclude_file_absolute_set = set(filter(lambda file_path : file_path.find(self._sp) == -1 and file_path.split('.')[-1] == 'py', self._exclude_file_list))
+                py_file_path_iter = filter(lambda py_file_path : not bool(set(filter(lambda file_path : file_path.find(self._sp) == -1 and file_path.split('.')[-1] == 'py', self._exclude_file_list)) & set(py_file_path.split(self._sp))), py_file_path_iter)
                 # 剔除不需要编译的路径
-                py_file_path_list = list(filter(lambda py_file_path : not any([exclude_path in py_file_path for exclude_path in self.exclude_path_list]), py_file_path_iter))
+                py_file_path_list = list(filter(lambda py_file_path : not any([exclude_path in py_file_path for exclude_path in self._exclude_path_list]), py_file_path_iter))
 
                 self.compile_result = Container()
                 err_task_dict = dict()
@@ -307,7 +309,7 @@ class AutoCython():
                 for rm_path in self._get_all_path_list(self.compile_path, file_type=['build', '__pycache__']):
                     shutil.rmtree(rm_path)
                 # 逆向重命名
-                for old_file, new_file in self.re_init_file_dict.items():
+                for old_file, new_file in self._re_init_file_dict.items():
                     os.rename(new_file, old_file)
                 print("time cost : ", time.time() - st)
                 print("complete!\n")
@@ -319,7 +321,7 @@ class AutoCython():
                         print(err_po.err)
                         print()
             finally:
-                self.compile_lock.release()
+                self._compile_lock.release()
 
         compile_thread = Thread(target=compile_th, args=(delete,))
         compile_thread.start()
@@ -339,7 +341,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.1'
+        self.version = 'AutoCython V1.2.3'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
