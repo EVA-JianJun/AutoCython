@@ -201,6 +201,8 @@ class AutoCython():
         try:
             dirname, filename = os.path.split(file_path)
             setup_file = 'AutoCython_' + filename
+            if not dirname:
+                dirname ='.'
             with open(os.path.join(dirname, setup_file), 'w', encoding='utf-8') as f:
                 f.write(self._setup_file_str.format(filename))
 
@@ -341,7 +343,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.3'
+        self.version = 'AutoCython V1.2.5'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
@@ -376,7 +378,11 @@ class AC_getopt_argv():
             sys.exit(1)
 
         if args:
-            self.compile_path = args[0]
+            if os.path.isfile(args[0]):
+                self.file_path = args[0]
+                self.a_file_flag = True
+            else:
+                self.compile_path = args[0]
 
         for opt, arg in opts:
             if opt in ('-h', '-H','--help'):
