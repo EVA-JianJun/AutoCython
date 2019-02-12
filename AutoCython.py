@@ -206,6 +206,9 @@ class AutoCython():
             with open(os.path.join(dirname, setup_file), 'w', encoding='utf-8') as f:
                 f.write(self._setup_file_str.format(filename))
 
+            if not complicating and os.path.isfile(os.path.join(dirname, "__init__.py")):
+                os.rename(os.path.join(dirname, "__init__.py"), os.path.join(dirname, "___init__.py"))
+
             # Popen('python AutoCython_DataServerClient_Alice.py build_ext --inplace', stdout=PIPE, stderr=PIPE, cwd='build_test/test1\\')
             cython_popen = Popen(self._Popen_cmd.format(setup_file), stdout=PIPE, stderr=PIPE, cwd=dirname)
 
@@ -215,6 +218,8 @@ class AutoCython():
 
             if wait:
                 cython_popen.wait()
+                if not complicating and os.path.isfile(os.path.join(dirname, "___init__.py")):
+                    os.rename(os.path.join(dirname, "___init__.py"), os.path.join(dirname, "__init__.py"))
 
             if not complicating and cython_popen.wait() != 0:
                 # 错误是输出
@@ -343,7 +348,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.5'
+        self.version = 'AutoCython V1.2.6'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
