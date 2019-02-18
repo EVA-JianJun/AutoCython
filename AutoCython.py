@@ -22,7 +22,7 @@ class Popen_out():
         self._system = platform.system()
 
         self.base = po
-        self.ExitCode =  po.wait()
+        self.ExitCode = po.wait()
         self.PyPath = py_path
         self.PydPath = pyd_path
         if self._system == 'Windows':
@@ -84,7 +84,7 @@ class AutoCython():
             # 用户指定
             try:
                 self._cpu_core_count = int(mode)
-            except:
+            except Exception:
                 self._cpu_core_count = 1
 
         # 编译后需要删除的目录
@@ -106,7 +106,7 @@ class AutoCython():
                 file_path = os.path.join(path, file)
                 if os.path.isfile(file_path):
                     if file_type or file_name:
-                        _, filename  = os.path.split(file_path)
+                        _, filename = os.path.split(file_path)
                         if filename.split('.')[-1] in file_type and file.find('AutoCython') == -1:
                             all_file.append(file_path)
                         if filename in file_name:
@@ -128,7 +128,7 @@ class AutoCython():
                 file_path = os.path.join(path, file)
                 if os.path.isdir(file_path):
                     if file_type:
-                        _, filename  = os.path.split(file_path)
+                        _, filename = os.path.split(file_path)
                         if filename in file_type:
                             all_path.append(file_path)
                     else:
@@ -224,7 +224,7 @@ class AutoCython():
             if not complicating and cython_popen.wait() != 0:
                 # 错误是输出
                 err_po = Popen_out(cython_popen, file_path)
-                print('\033[0;37;41m'+file_path, ':\033[0m')
+                print('\033[0;37;41m' + file_path, ':\033[0m')
                 print(err_po.out)
                 print(err_po.err)
                 print()
@@ -274,7 +274,9 @@ class AutoCython():
                 err_task_dict = dict()
                 task_index_dict = dict()
                 print("Initialize compilation information")
-                for i in range(len(py_file_path_list)) : print('{0:<4} path : {1}'.format(i, py_file_path_list[i])); task_index_dict[py_file_path_list[i]] = str(i)
+                for i in range(len(py_file_path_list)):
+                    print('{0:<4} path : {1}'.format(i, py_file_path_list[i]))
+                    task_index_dict[py_file_path_list[i]] = str(i)
                 print("Compiling...")
                 # 创建线程池
                 pool = ThreadPoolExecutor(self._cpu_core_count)
@@ -322,7 +324,7 @@ class AutoCython():
                 print("complete!\n")
                 if log:
                     for err_file_name, err_po in err_task_dict.items():
-                        print('\033[0;37;41m'+err_file_name, ':\033[0m')
+                        print('\033[0;37;41m' + err_file_name, ':\033[0m')
                         print("path : ", err_po.PyPath)
                         print(err_po.out)
                         print(err_po.err)
