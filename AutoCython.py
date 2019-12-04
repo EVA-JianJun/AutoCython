@@ -76,7 +76,7 @@ class AutoCython():
         # 编译时使用的cpu核数
         if mode in ('f', 'fast'):
             # cpu核数
-            self._cpu_core_count = os.cpu_count() or 1
+            self._cpu_core_count = os.cpu_count() / 4 or 1
         elif mode in ('n', 'normal'):
             # 使用1核
             self._cpu_core_count = 1

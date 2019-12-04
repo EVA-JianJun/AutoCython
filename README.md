@@ -1,4 +1,5 @@
-AutoCython
+# AutoCython
+
 ==================
 **使用Cython批量编译.py文件为.pyd文件！**
 ![py_pyd][1]
@@ -17,9 +18,11 @@ AutoCython
 * **易纠错**：快速纠错，在编译失败时能极快的获取错误信息；
 
 ## 前置
-Cython : https://github.com/cython/cython
+
+Cython : <https://github.com/cython/cython>
 
 ### Cython前置
+
 如果你已经正确安装配置好Cython，那么你可以不用看这；
 
 推荐C、C++编译器gcc和VS选一个，其他编译器能否使用未知，具体的安装请查阅Cython的安装教程；
@@ -31,18 +34,22 @@ vs安装简便，占用空间大，配置简单；gcc安装简便，占用空间
 不想折腾的话安装vs，想精简一点的话安装gcc。
 
 **win下gcc推荐安装MinGW**：
-* 64位：http://mingw-w64.org/
-* 32位：http://www.mingw.org/
+
+* 64位：<http://mingw-w64.org/>
+* 32位：<http://www.mingw.org/>
 
 具体安装Cython过程请查阅相关资料
 
 ## 使用方式
+
 编译当前目录下能找到的所有py文件：
 
     from AutoCython import AutoCython
     ac = AutoCython()
     ac.compile()
+
 ### 自定义
+
 AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='f', delete=['b', 'p', 'c']
 
     compile_path ： str ，需要编译的目录；
@@ -80,6 +87,7 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
 AutoCython类里compile和compile_file函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等。
 
 ### 错误处理
+
 在这个目录下：
 ![文件目录][3]
 
@@ -105,14 +113,13 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
 其下的属性中其中 **err** 为错误输出；**out** 为正常输出；**base** 为任务Popen对象；**ExitCode** 为编译退出时错误代码，与系统保持一致；**PyPath** 为源文件目录；**PydPath** 为编译生成的pyd文件目录。
 
-
 **查看错误信息：**
 ![错误信息][8]
 
 可以看到**test2.py**为使用了Cython不支持的函数功能print(end='')，**新建文本文档.py**为文件命名不符合规范，导致编译失败。
 
- - 对于print(end='')使用end参数不能编译通过，可以外部导入一个print_no_end.py文件，其中自定义end=''的函数，然后不编译这个print_no_end.py这个文件就好。
- - 解决的方法一是重新命名 新建文本文档.py ，让其文件名符合C命名规范;
+* 对于print(end='')使用end参数不能编译通过，可以外部导入一个print_no_end.py文件，其中自定义end=''的函数，然后不编译这个print_no_end.py这个文件就好。
+* 解决的方法一是重新命名 新建文本文档.py ，让其文件名符合C命名规范;
 
 至于其他遇到的问题怎么改，请查阅Cython的文档，这只是个轮子。重新编译错误文件可以使用compile_file函数单独编译。
 
@@ -120,8 +127,8 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
 所以错误处理你只需要按几个TAB就可以查看了，我觉得我这里已经写的够懒了！
 
-
 ## 命令行
+
 除了把AutoCython作为包导入外，AutoCython也支持直接命令行进行编译：
 
 与上面功能一样的命令行写法:
@@ -133,7 +140,6 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
     AutoCython build_test
 
 ![命令行][11]
-
 
   [1]: https://ws3.sinaimg.cn/large/8253c4ddly1fzj3wzhaeaj20xc0njav8.jpg
   [2]: https://ws2.sinaimg.cn/large/8253c4ddly1fziy5tgpw2j21740pr7wh.jpg
