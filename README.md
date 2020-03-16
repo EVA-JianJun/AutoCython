@@ -1,10 +1,9 @@
 # AutoCython
 
-**使用Cython批量编译.py文件为.pyd文件！**
+**自动Cython，使用Cython批量编译.py文件为.pyd文件！**
 ![py_pyd][1]
 
-这是一个轮子，让你更加快速的把.py调教为.pyd！
-大多数情况下，你只需要这样就可以很快的调教！
+这是一个轮子，大多数情况下，你只需要这样就可以很快的把.py编译为.pyd！
 
     from AutoCython import AutoCython
     AutoCython().compile()
@@ -13,7 +12,7 @@
 
 * **全自动**：自动编译当前目录下所有.py文件，支持指定目录编译或单文件编译；
 * **个性化**：支持指定排除目录或排除文件跳过编译；
-* **高效率**：默认利用全部CPU核心，也可指定使用核心数量；
+* **高效率**：~~默认利用全部CPU核心，也可指定使用核心数量；~~ 默认启动进程数为cpu核心数一半，大多数情况下可以把cpu占满；
 * **易纠错**：快速纠错，在编译失败时能极快的获取错误信息；
 
 ## 前置
@@ -133,21 +132,22 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 与上面功能一样的命令行写法:
 
     python AutoCython.py -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
+**强烈推荐使用EXE命令行，比较方便**
 
-除了AutoCython.py外我在 **[releases][9]** 中也提供了exe程序 ![exe图标][10]可以直接在win下使用：
+除了AutoCython.py外我在 **[releases][9]** 中也提供了exe程序可以直接在win下使用：
 
     AutoCython build_test
 
 ![命令行][11]
 
-  [1]: https://ws3.sinaimg.cn/large/8253c4ddly1fzj3wzhaeaj20xc0njav8.jpg
-  [2]: https://ws2.sinaimg.cn/large/8253c4ddly1fziy5tgpw2j21740pr7wh.jpg
-  [3]: https://ws4.sinaimg.cn/large/8253c4ddly1fzgmw57xpuj21740prkjl.jpg
-  [4]: https://ws2.sinaimg.cn/large/8253c4ddly1fzixse4vw9j21740prb29.jpg
-  [5]: https://ws4.sinaimg.cn/large/8253c4ddly1fziyae76u4j20jy02iq4d.jpg
-  [6]: https://ws2.sinaimg.cn/large/8253c4ddly1fziybwsx9oj20je02iq4f.jpg
-  [7]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyeaaqosj20e002imy5.jpg
-  [8]: https://ws2.sinaimg.cn/large/8253c4ddly1fziygp52y3j21740prb29.jpg
+  [1]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_1.jpg
+  [2]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_2.jpg
+  [3]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_3.jpg
+  [4]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_4.jpg
+  [5]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_5.jpg
+  [6]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_6.jpg
+  [7]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_7.jpg
+  [8]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_8.jpg
   [9]: https://github.com/EVA-JianJun/AutoCython/releases
-  [10]: https://ws2.sinaimg.cn/large/8253c4ddly1fziyi8nmofj203c03cq32.jpg
-  [11]: https://ws2.sinaimg.cn/large/8253c4ddly1fzhe4nnwwgj21740pr7wh.jpg
+  [10]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_10.jpg
+  [11]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_11.jpg
