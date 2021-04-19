@@ -1,0 +1,1 @@
+pyinstaller -F -i pic.ico AutoCython.py
