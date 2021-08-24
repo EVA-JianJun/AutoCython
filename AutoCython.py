@@ -77,7 +77,9 @@ class AutoCython():
         # 编译时使用的cpu核数
         if mode in ('f', 'fast'):
             # cpu核数
-            self._cpu_core_count = os.cpu_count() / 4 or 1
+            self._cpu_core_count = int(os.cpu_count() / 4)
+            if not self._cpu_core_count:
+                self._cpu_core_count = 1
         elif mode in ('n', 'normal'):
             # 使用1核
             self._cpu_core_count = 1
@@ -351,7 +353,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.6'
+        self.version = 'AutoCython V1.2.7'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
@@ -359,7 +361,7 @@ class AC_getopt_argv():
                         "  -f -F --file                Compile only a .py file.\n"+
                         "  -c -C --compile             Compile and assemble all .py files under the path.\n"+
                         "  -e -E --exclude             Excluded .py files or all .py files in a path, Used ';' split file or path.\n"+
-                        "  -m -M --mode                Compile mode of 'f'(fast) used all CPU core, 'n'(normal) only used one CPU core,\n"+
+                        "  -m -M --mode                Compile mode of 'f'(fast) used a quarter of all CPU core, 'n'(normal) only used one CPU core,\n"+
                         "                                    or used a number eg '4' of used CPU core what you want.\n"+
                         "  -d -D --delete              Select to delete the file generated after compilation\n"+
                         "                                    b : The build path\n"+
@@ -370,13 +372,37 @@ class AC_getopt_argv():
                         "                                    eg : 'bp' or 'bps'\n"+
                         "                                    default: 'bpc'\n"+
                         "  -h -H --help                Display command line options of sub-processes.\n"+
+                        "        --ch                  Display Chinese command line options of sub-processes.\n"+
                         "  -v -V --version             Display compiler version information.\n"
                         )
 
-    def geto(self) -> Union(str, list, str, list):
+        self.help_info_ch =(
+                        "命令行: AutoCython [选项] ...\n"+
+                        "选项:\n"+
+                        "  -f -F --file                编译一个.py文件.\n"+
+                        "  -c -C --compile             编译目录下的所有.py文件.\n"+
+                        "  -e -E --exclude             编译时忽略的.py文件和忽略编译的目录, 使用';'字符分割参数.\n"+
+                        "  -m -M --mode                编译使用的CPU核心数量.\n"+
+                        "                                    fast模式: 使用 Autocython -m f 表示使用所有CPU核心数的四分之一\n"+
+                        "                                    normal模式: 使用 Autocython -m n 使用1核心进行编译\n"+
+                        "                                    number模式: 使用 Autocython -m 2 指定使用2核心进行编译\n"+
+                        "  -d -D --delete              选择删除编译后生成的临时文件.\n"+
+                        "                                    b : build 目录\n"+
+                        "                                    p : setup.py 文件\n"+
+                        "                                    c : .c 中间代码\n"+
+                        "                                    s : .py 源代码\n"+
+                        "                                格式:\n"+
+                        "                                    例 : 'bp' 或者 'bps'\n"+
+                        "                                    默认: 'bpc'\n"+
+                        "  -h -H --help                显示命令行帮助文档.\n"+
+                        "        --ch                  显示中文命令行帮助文档.\n"+
+                        "  -v -V --version             显示编译器版本信息.\n"
+                        )
+
+    def geto(self) -> Union[str, list, str, list]:
         """ 获取命令行参数 """
         try:
-            opts, args = getopt.getopt(sys.argv[1:],"hHvVF:f:C:c:E:e:M:m:D:d:",["help","version","file=","compile=","exclude=","mode=","delete="])
+            opts, args = getopt.getopt(sys.argv[1:],"hHvVF:f:C:c:E:e:M:m:D:d:",["help","version","ch","file=","compile=","exclude=","mode=","delete="])
             if not opts and not args:
                 print(self.help_info + '\n' + self.version)
                 sys.exit()
@@ -395,6 +421,9 @@ class AC_getopt_argv():
         for opt, arg in opts:
             if opt in ('-h', '-H','--help'):
                 print(self.help_info + '\n' + self.version)
+                sys.exit()
+            elif opt in ('--ch'):
+                print(self.help_info_ch + '\n' + self.version)
                 sys.exit()
             elif opt in ('-v', '-V','--version'):
                 print(self.version)
