@@ -10,6 +10,7 @@ import traceback
 from threading import Thread, Lock
 from subprocess import Popen, PIPE
 from concurrent.futures import as_completed, ThreadPoolExecutor
+from typing import Union
 
 class Container(object):
     def __setitem__(self, key, value):
@@ -372,7 +373,7 @@ class AC_getopt_argv():
                         "  -v -V --version             Display compiler version information.\n"
                         )
 
-    def geto(self) -> (str, list, str, list):
+    def geto(self) -> Union(str, list, str, list):
         """ 获取命令行参数 """
         try:
             opts, args = getopt.getopt(sys.argv[1:],"hHvVF:f:C:c:E:e:M:m:D:d:",["help","version","file=","compile=","exclude=","mode=","delete="])
