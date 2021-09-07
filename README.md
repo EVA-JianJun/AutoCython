@@ -5,9 +5,7 @@
 
 ## 安装
 
-从 **[releases][9]** 中下载 AutoCython-1.2.8-py3-none-any.whl 后使用 pip 安装.
-
-    pip install AutoCython-1.2.8-py3-none-any.whl
+    pip install AutoCython-JianJun
 
 ## 使用
 

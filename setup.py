@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fd:
     long_description = fd.read()
 
 setup(
-    name = 'AutoCython',
+    name = 'AutoCython-JianJun',
     version = '1.2.8',
     author = 'jianjun',
     author_email = '910667956@qq.com',
