@@ -27,8 +27,9 @@ class Popen_out():
         self.PyPath = py_path
         self.PydPath = pyd_path
         if self._system == 'Windows':
-            self.out = po.stdout.read().decode('gbk')
-            self.err = po.stderr.read().decode('gbk')
+
+            self.out = po.stdout.read().decode('utf-8', errors='ignore')
+            self.err = po.stderr.read().decode('utf-8', errors='ignore')
         else:
             # utf-8
             self.out = po.stdout.read().decode()
@@ -353,7 +354,7 @@ class AC_getopt_argv():
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.2.7'
+        self.version = 'AutoCython V1.2.8'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
@@ -422,7 +423,7 @@ class AC_getopt_argv():
             if opt in ('-h', '-H','--help'):
                 print(self.help_info + '\n' + self.version)
                 sys.exit()
-            elif opt in ('--ch'):
+            elif opt in ('--ch', ):
                 print(self.help_info_ch + '\n' + self.version)
                 sys.exit()
             elif opt in ('-v', '-V','--version'):

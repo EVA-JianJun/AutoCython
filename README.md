@@ -3,9 +3,17 @@
 **自动Cython，使用Cython批量编译.py文件为.pyd文件！**
 ![py_pyd][1]
 
-这是一个轮子，大多数情况下，你只需要这样就可以很快的把.py编译为.pyd！
+## 安装
 
-    from AutoCython import AutoCython
+从 **[releases][9]** 中下载 AutoCython-1.2.8-py3-none-any.whl 后使用 pip 安装.
+
+    pip install AutoCython-1.2.8-py3-none-any.whl
+
+## 使用
+
+这是一个轮子，大多数情况下，你只需要这样就可以很快的把 `.py` 编译为 `.pyd` ！
+
+    import AutoCython
     AutoCython().compile()
 
 ![AutoCython][2]
@@ -42,7 +50,7 @@ vs安装简便，占用空间大，配置简单；gcc安装简便，占用空间
 
 编译当前目录下能找到的所有py文件：
 
-    from AutoCython import AutoCython
+    import AutoCython
     ac = AutoCython()
     ac.compile()
 
@@ -70,39 +78,44 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
 
 **例子：**
 
-编译目录 D:/python_code/ProjectPath 下的所有.py文件；
+编译目录 `D:/python_code/ProjectPath` 下的所有 `.py` 文件；
 
-排除所有名为 tmp.py 的文件，排除 ./ProjectPath/print_cy.py 文件，排除 ./ProjectPath/data/tmp 目录下的文件不编译；
+排除所有名为 `tmp.py` 的文件，排除 `./ProjectPath/print_cy.py` 文件，排除 `./ProjectPath/data/tmp` 目录下的文件不编译；
 
 使用8个CPU核心；
 
-只删除编译后产生的build文件夹和中间文件setup_file，保留C代码。
+只删除编译后产生的 `build` 文件夹和中间文件 `setup_file` ，保留 `C` 代码。
 
-    from AutoCython import AutoCython
-    ac = AutoCython(compile_path='D:/python_code/ProjectPath', exclude=['tmp.py','./ProjectPath/print_cy.py','./ProjectPath/data/tmp'], mode='8', delete=['b', 'p'])
+    import AutoCython
+    ac = AutoCython(
+        compile_path='D:/python_code/ProjectPath',
+        exclude=['tmp.py','./ProjectPath/print_cy.py','./ProjectPath/data/tmp'],
+        mode='8',
+        delete=['b', 'p']
+        )
     ac.compile()
 
-AutoCython类里compile和compile_file函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等。
+`AutoCython` 类里 `compile` 和 `compile_file` 函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等。
 
 ### 错误处理
 
 在这个目录下：
 ![文件目录][3]
 
-运行如下代码只编译目录 build_test\ 下的.py文件;
+运行如下代码只编译目录 `build_test\` 下的 `.py` 文件;
 
-    from AutoCython import AutoCython
+    import AutoCython
     ac = AutoCython('./build_test/')
     ac.compile()
 
 **程序默认会打印出错误文件的错误日志**
 ![错误编译][4]
 
-可以看到 .\build_test\新建文本文档.py 和 .\build_test\test1\test2.py 发生错误，如何手动查看错误信息？
-在ipython下直接打.ac按TAB，选择 **compile_result**：
+可以看到 `.\build_test\新建文本文档.py` 和 `.\build_test\test1\test2.py` 发生错误，如何手动查看错误信息？
+在`ipython`下直接打`.ac`按`TAB`，选择 `compile_result`：
 ![compile_result][5]
 
-再按TAB，好了，这时候所有的编译任务都调出来了，错误的任务名称以 **ERR_** 开头，正确的以 **OK_** 开头：
+再按 `TAB`，好了，这时候所有的编译任务都调出来了，错误的任务名称以 **ERR_** 开头，正确的以 **OK_** 开头：
 ![错误任务][6]
 
 选择编号为**2**，错误文件名为test2的任务：
@@ -131,12 +144,7 @@ AutoCython类里compile和compile_file函数的使用和函数参数请参考源
 
 与上面功能一样的命令行写法:
 
-    python AutoCython.py -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
-**强烈推荐使用EXE命令行，比较方便**
-
-除了AutoCython.py外我在 **[releases][9]** 中也提供了exe程序可以直接在win下使用：
-
-    AutoCython build_test
+    AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
 
 ![命令行][11]
 
