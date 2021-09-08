@@ -5,7 +5,7 @@
 
 ## 安装
 
-    pip install AutoCython-JianJun
+    pip install AutoCython-jianjun
 
 ## 使用
 
