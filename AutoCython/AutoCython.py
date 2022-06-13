@@ -214,7 +214,7 @@ class AutoCython():
                 os.rename(os.path.join(dirname, "__init__.py"), os.path.join(dirname, "___init__.py"))
 
             # Popen('python AutoCython_DataServerClient_Alice.py build_ext --inplace', stdout=PIPE, stderr=PIPE, cwd='build_test/test1\\')
-            cython_popen = Popen(self._Popen_cmd.format(setup_file), stdout=PIPE, stderr=PIPE, cwd=dirname)
+            cython_popen = Popen(self._Popen_cmd.format(setup_file).split(" "), stdout=PIPE, stderr=PIPE, cwd=dirname)
 
             if delete:
                 delete_tmp_file_th = Thread(target=delete_tmp_file, args=(cython_popen, dirname, filename, setup_file, delete, complicating))
