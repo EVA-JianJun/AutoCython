@@ -144,6 +144,9 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
 
     AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
 
+## 更新记录
+1.20220613 更新对Linux的支持,Linux下需要配置gcc&g++
+
 ![命令行][11]
 
   [1]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png

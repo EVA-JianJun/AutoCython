@@ -12,6 +12,14 @@ from subprocess import Popen, PIPE
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from typing import Union
 
+sysstr = platform.system()
+if (sysstr == "Windows"):
+    DLL_TYPE = "pyd"
+elif (sysstr == "Linux"):
+    DLL_TYPE = "so"
+else:
+    DLL_TYPE = "pyd"
+
 class Container(object):
     def __setitem__(self, key, value):
         self.__setattr__(key, value)
@@ -308,7 +316,7 @@ class AutoCython():
                         # 编译正确
                         try:
                             path, file_name = os.path.split(file_path)
-                            pyd_name = list(filter(lambda name : name.split('.')[-1] == 'pyd' and name.split('.')[0] == file_name[:-3], os.listdir(path)))[0]
+                            pyd_name = list(filter(lambda name : name.split('.')[-1] == DLL_TYPE and name.split('.')[0] == file_name[:-3], os.listdir(path)))[0]
                             pyd_path = os.path.join(path, pyd_name)
                             self.compile_result['OK_' + task_index_dict[file_path] + '_' + file_name[:-3]] = Popen_out(cython_popen, file_path, pyd_path)
                         except Exception as err:
