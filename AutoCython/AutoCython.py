@@ -282,6 +282,19 @@ class AutoCython():
                 # 剔除不需要编译的路径
                 py_file_path_list = list(filter(lambda py_file_path : not any([exclude_path in py_file_path for exclude_path in self._exclude_path_list]), py_file_path_iter))
 
+                # 检查不编译的文件
+                tmp_py_file_path_list = []
+                for file_path in py_file_path_list:
+                    with open(file_path, "r", encoding="utf-8") as fr:
+                        line1 = fr.readline().strip()
+                        line2 = fr.readline().strip()
+
+                    if line1 == "# AucoCython No Compile" or line2 == "# AucoCython No Compile":
+                        pass
+                    else:
+                        tmp_py_file_path_list.append(file_path)
+                py_file_path_list = tmp_py_file_path_list
+
                 self.compile_result = Container()
                 err_task_dict = dict()
                 task_index_dict = dict()

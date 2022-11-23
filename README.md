@@ -14,6 +14,14 @@
     import AutoCython
     AutoCython().compile()
 
+## 命令行
+
+除了把 `AutoCython` 作为包导入外，`AutoCython` 也支持直接命令行进行编译：
+
+与上面功能一样的命令行写法:
+
+    AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
+
 ![AutoCython][2]
 
 * **全自动**：自动编译当前目录下所有.py文件，支持指定目录编译或单文件编译；
@@ -136,16 +144,13 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
 
 所以错误处理你只需要按几个 `TAB` 就可以查看了，我觉得我这里已经写的够懒了！
 
-## 命令行
+### 手动指定不编译
 
-除了把 `AutoCython` 作为包导入外，`AutoCython` 也支持直接命令行进行编译：
-
-与上面功能一样的命令行写法:
-
-    AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
+在不需要编译的文件头两行任意一行写上 `# AucoCython No Compile` 则该文件会跳过编译.
 
 ## 更新记录
 1.20220613 更新对Linux的支持,Linux下需要配置gcc&g++
+2.20221123 可以通过文件头手动指定不编译的文件
 
 ![命令行][11]
 
