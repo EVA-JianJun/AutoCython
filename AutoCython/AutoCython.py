@@ -370,12 +370,13 @@ class AC_getopt_argv():
         self.exclude = []
         self.mode = 'f'
         self.delete = ['b','p','c']
+        self.python_cmd = "python"
 
         # a file
         self.file_path = ''
         self.a_file_flag = False
 
-        self.version = 'AutoCython V1.3.1'
+        self.version = 'AutoCython V1.3.2'
         # 像这样写格式好看一点
         self.help_info =(
                         "Usage: AutoCython [options] ...\n"+
@@ -393,6 +394,8 @@ class AC_getopt_argv():
                         "                                format:\n"+
                         "                                    eg : 'bp' or 'bps'\n"+
                         "                                    default: 'bpc'\n"+
+                        "        --python              Some Unix systems such as MacOS no python command line, \n"+
+                        "                              you can set this parameter such as 'python3.8' to invoke the python command line.\n"+
                         "  -h -H --help                Display command line options of sub-processes.\n"+
                         "        --ch                  Display Chinese command line options of sub-processes.\n"+
                         "  -v -V --version             Display compiler version information.\n"
@@ -416,6 +419,8 @@ class AC_getopt_argv():
                         "                                格式:\n"+
                         "                                    例 : 'bp' 或者 'bps'\n"+
                         "                                    默认: 'bpc'\n"+
+                        "        --python              有些 Unix 系统如 MacOS 没有 python 命令行,\n"+
+                        "                              可以设置此参数如 'python3.8' 来调用 python 命令行.\n"+
                         "  -h -H --help                显示命令行帮助文档.\n"+
                         "        --ch                  显示中文命令行帮助文档.\n"+
                         "  -v -V --version             显示编译器版本信息.\n"
@@ -424,7 +429,7 @@ class AC_getopt_argv():
     def geto(self) -> Union[str, list, str, list]:
         """ 获取命令行参数 """
         try:
-            opts, args = getopt.getopt(sys.argv[1:],"hHvVF:f:C:c:E:e:M:m:D:d:",["help","version","ch","file=","compile=","exclude=","mode=","delete="])
+            opts, args = getopt.getopt(sys.argv[1:],"hHvVF:f:C:c:E:e:M:m:D:d:",["help","version","ch","file=","compile=","exclude=","mode=","delete=","python="])
             if not opts and not args:
                 print(self.help_info + '\n' + self.version)
                 sys.exit()
@@ -461,9 +466,12 @@ class AC_getopt_argv():
                 self.mode = arg
             elif opt in ('-D', '-d','--delete'):
                 self.delete = list(arg)
+            elif opt in ('--python'):
+                self.python_cmd = arg
 
         if self.a_file_flag:
             ac = AutoCython()
+            ac._Popen_cmd = ac._Popen_cmd.replace("python", self.python_cmd)
             ac.compile_file(self.file_path, wait=True, delete=self.delete, complicating=False)
             sys.exit()
 

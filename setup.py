@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fd:
 
 setup(
     name = 'AutoCython-jianjun',
-    version = '1.3.1',
+    version = '1.3.2',
     author = 'jianjun',
     author_email = '910667956@qq.com',
     url = 'https://github.com/EVA-JianJun/AutoCython',
