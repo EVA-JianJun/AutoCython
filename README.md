@@ -9,6 +9,8 @@
 
 ## 使用
 
+**直接使用下面的命令行会更加方便**
+
 这是一个轮子，大多数情况下，你只需要这样就可以很快的把 `.py` 编译为 `.pyd` ！
 
     import AutoCython
@@ -153,6 +155,7 @@ AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='
 ## 更新记录
 1.20220613 更新对Linux的支持,Linux下需要配置gcc&g++
 2.20221123 可以通过文件头手动指定不编译的文件
+3.20230306 更新可以指定命令行头如 `Python310` 以此支持非Widnows系统下编译
 
   [1]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png
   [2]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_2.jpg
