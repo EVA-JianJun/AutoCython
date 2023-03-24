@@ -1,161 +1,97 @@
 # AutoCython
 
-**自动Cython，使用Cython批量编译.py文件为.pyd文件！**
+**自动 Cython, 使用 Cython 批量编译 `.py` 文件为 `.pyd` 文件！**
 ![py_pyd][1]
 
 ## 安装
 
     pip install AutoCython-jianjun
 
-## 使用
+## 依赖
 
-**直接使用下面的命令行会更加方便**
+[Cython](https://github.com/cython/cython) 和 C/C++ 编译器
 
-这是一个轮子，大多数情况下，你只需要这样就可以很快的把 `.py` 编译为 `.pyd` ！
+**如果你都配置完毕了你可以跳过本节.**
 
-    import AutoCython
-    AutoCython().compile()
+### Cython
 
-## 命令行
+```
+pip install Cython
+```
 
-![命令行][11]
+### C/C++ 编译器
 
-除了把 `AutoCython` 作为包导入外，`AutoCython` 也支持直接命令行进行编译：
+推荐 `gcc` 和 `visual studio` 选一个, 其他编译器请查阅 Cython 文档.
 
-详细的参数说明 英文 `AutoCython -h` 或者 中文 `AutoCython --ch` 查看, 也可以查看下面的详细说明:
+* `VS` 安装简便, 占用空间大, 配置简单.
+* `gcc` 安装简便, 占用空间小, 配置比较复杂.
 
-    AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 8 -D bp
+不想折腾或者你是 Windows 的话推荐安装 VS, Linux 等系统可以直接使用自带的 gcc。
 
-![AutoCython][2]
+大部分的编译环境都可以使用, 我在 Win, Linux, Mac, Python3.6 到 Python3.10 都可以使用.
 
-* **全自动**：自动编译当前目录下所有.py文件，支持指定目录编译或单文件编译；
-* **个性化**：支持指定排除目录或排除文件跳过编译；
-* **高效率**：~~默认利用全部CPU核心，也可指定使用核心数量；~~ 默认启动进程数为cpu核心数四分之一，大多数情况下可以把cpu占满；
-* **易纠错**：快速纠错，在编译失败时能极快的获取错误信息；
-
-## 前置
-
-Cython : <https://github.com/cython/cython>
-
-### Cython前置
-
-如果你已经正确安装配置好Cython，那么你可以不用看这；
-
-推荐C、C++编译器gcc和VS选一个，其他编译器能否使用未知，具体的安装请查阅Cython的安装教程；
-
-目前测试了64位Python3.6与gcc 64位，与VS2017下都可以通过编译；
-**需要注意的是，如果你使用的Python是64位的，那么对应的C、C++编译器也必须为64位；**
-
-vs安装简便，占用空间大，配置简单；gcc安装简便，占用空间小，配置比较复杂；
-不想折腾的话安装vs，想精简一点的话安装gcc。
+**需要注意的是, 如果你使用的 Python 是64位的, 那么对应的 C、C++ 编译器也必须为64位；**
 
 **win下gcc推荐安装MinGW**：
 
 * 64位：<http://mingw-w64.org/>
 * 32位：<http://www.mingw.org/>
 
-具体安装Cython过程请查阅相关资料
+## 使用
 
-## 使用方式
+![命令行][11]
 
-编译当前目录下能找到的所有py文件：
+### 命令行
 
-    import AutoCython
-    ac = AutoCython()
-    ac.compile()
+使用命令行进行编译：
 
-### 自定义
+`AutoCython -h` 或者 `AutoCython --ch` 查看英文和中文帮助.
 
-AutoCython类接受4个参数，默认为：compile_path='.', exclude=[], mode='f', delete=['b', 'p', 'c']
+    # 编译一个文件
+    AutoCython -f test.py
 
-    compile_path ： str ，需要编译的目录；
+    # 编译一个目录
+    AutoCython -C D:/python_code/ProjectPath
 
-    exclude      ： list，需要排除的目录或者文件：
-                        eg ：['./abc', './a_path/test.py', 'test2.py']
-                        这么写会排除目录./abc下的所有.py文件，排除./a_path/test.py文件，排除所有名为test2.py的文件不进行编译
+![AutoCython][2]
 
-    mode         ： str， 指定使用CPU核心数：
-                        'f' : 使用全部CPU核心数量的四分之一
-                        'n' : 只使用一个,相当于单进程
-                        '4' : 使用4个CPU核心，输入指定使用的数目
+**例子**
 
-    delete       :  list, 指定编译后需要清理的临时文件，一般默认就好：
-                         b  ： build文件夹
-                         p  ： 中间文件setup_file py文件
-                         c  ： 产生的c文件
-                         s  ： 源代码文件，慎用
-                         all： 全部清理
+编译目录 `D:/python_code/ProjectPath`\
+排除所有名为 `tmp.py` 的文件\
+排除 `./ProjectPath/print_cy.py` 文件\
+排除 `./ProjectPath/data/tmp` 目录下的文件不编译\
+使用2个CPU核心\
+只删除编译后产生的 `build` 文件夹和中间文件 `setup_file`, 保留自动生成的 `C` 代码.\
 
-**例子：**
+    AutoCython -C D:/python_code/ProjectPath -E tmp.py;./ProjectPath/print_cy.py;./ProjectPath/data/tmp -M 2 -D bp
 
-编译目录 `D:/python_code/ProjectPath` 下的所有 `.py` 文件；
+## 特性
 
-排除所有名为 `tmp.py` 的文件，排除 `./ProjectPath/print_cy.py` 文件，排除 `./ProjectPath/data/tmp` 目录下的文件不编译；
+* **全自动**：自动编译当前目录下所有.py文件, 支持指定目录编译或单文件编译；
+* **个性化**：支持指定排除目录或排除文件跳过编译；
+* **高效率**：默认启动进程数为cpu核心数四分之一, 大多数情况下可以把cpu跑满；
+* **易纠错**：快速纠错, 在编译失败时能极快的获取错误信息；
 
-使用8个CPU核心；
+### 常见错误
 
-只删除编译后产生的 `build` 文件夹和中间文件 `setup_file` ，保留 `C` 代码。
+* `print(end='')`
+Cython 不支持 print 函数的 end 参数, 可以在外部定义 `def my_print(*args, **kwargs): print(*args, end='', **kwargs)`, 然后在需要编译的文件中导入这个外部函数.
 
-    import AutoCython
-    ac = AutoCython(
-        compile_path='D:/python_code/ProjectPath',
-        exclude=['tmp.py','./ProjectPath/print_cy.py','./ProjectPath/data/tmp'],
-        mode='8',
-        delete=['b', 'p']
-        )
-    ac.compile()
+* `新建文本文档.py`
+文件名需要符合  `C` 命名规范
 
-`AutoCython` 类里 `compile` 和 `compile_file` 函数的使用和函数参数请参考源代码，参数功能为控制阻塞，并发处理等。
-
-### 错误处理
-
-在这个目录下：
-![文件目录][3]
-
-运行如下代码只编译目录 `build_test\` 下的 `.py` 文件;
-
-    import AutoCython
-    ac = AutoCython('./build_test/')
-    ac.compile()
-
-**程序默认会打印出错误文件的错误日志**
-![错误编译][4]
-
-可以看到 `.\build_test\新建文本文档.py` 和 `.\build_test\test1\test2.py` 发生错误，如何手动查看错误信息？
-在`ipython`下直接打`.ac`按`TAB`，选择 `compile_result`：
-![compile_result][5]
-
-再按 `TAB`，好了，这时候所有的编译任务都调出来了，错误的任务名称以 `ERR_` 开头，正确的以 `OK_` 开头：
-![错误任务][6]
-
-选择编号为 `2`，错误文件名为 `test2` 的任务：
-
-![任务属性][7]
-
-其下的属性中其中 `err` 为错误输出；`out` 为正常输出；`base` 为任务 `Popen` 对象；`ExitCode` 为编译退出时错误代码，与系统保持一致；`PyPath` 为源文件目录；`PydPath` 为编译生成的 `pyd` 文件目录。
-
-**查看错误信息：**
-![错误信息][8]
-
-可以看到 `test2.py` 为使用了 `Cython` 不支持的函数功能 `print(end='')`，`新建文本文档.py` 为文件命名不符合规范，导致编译失败。
-
-* 对于 `print(end='')` 使用 `end `参数不能编译通过，可以外部导入一个 `print_no_end.py` 文件，其中自定义 `end=''` 的函数，然后不编译这个 `print_no_end.py` 这个文件就好。
-* 解决的方法一是重新命名 `新建文本文档.py` ，让其文件名符合 `C` 命名规范;
-
-至于其他遇到的问题怎么改，请查阅 `Cython` 的文档，这只是个轮子。重新编译错误文件可以使用 `compile_file` 函数单独编译。
-
-**在编译时系统会为每一个文件分配一个 `ID` ，如果有同名文件，其中一个错误，可以通过 `ID` 很好的找到对应的文件进行错误处理。**
-
-所以错误处理你只需要按几个 `TAB` 就可以查看了，我觉得我这里已经写的够懒了！
+其他问题请查阅 `Cython` 官方文档.
 
 ### 手动指定不编译
 
-在不需要编译的文件头两行任意一行写上 `# AucoCython No Compile` 则该文件会跳过编译.
+在不需要编译的文件 **头两行** 任意一行写上 `# AucoCython No Compile` 则该文件会跳过编译.
 
 ## 更新记录
-1.20220613 更新对Linux的支持,Linux下需要配置gcc&g++
-2.20221123 可以通过文件头手动指定不编译的文件
-3.20230306 更新可以指定命令行头如 `Python310` 以此支持非Widnows系统下编译
+1. 20220613 更新对Linux的支持, Linux下需要配置gcc&g++
+2. 20221123 可以通过文件头手动指定不编译的文件
+3. 20230306 更新可以指定命令行头如 `Python310` 以此支持非Widnows系统下编译
+4. 20230324 更新文档
 
   [1]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png
   [2]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_2.jpg
