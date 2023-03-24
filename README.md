@@ -75,10 +75,10 @@ pip install Cython
 
 ### 常见错误
 
-* `print(end='')`
+* `print(end='')`\
 Cython 不支持 print 函数的 end 参数, 可以在外部定义 `def my_print(*args, **kwargs): print(*args, end='', **kwargs)`, 然后在需要编译的文件中导入这个外部函数.
 
-* `新建文本文档.py`
+* `新建文本文档.py`\
 文件名需要符合  `C` 命名规范
 
 其他问题请查阅 `Cython` 官方文档.
