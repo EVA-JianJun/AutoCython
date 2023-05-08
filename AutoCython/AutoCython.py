@@ -45,7 +45,7 @@ class Popen_out():
 
 class AutoCython():
 
-    def __init__(self, compile_path='.', exclude=[], mode='f', delete=['b','p','c']):
+    def __init__(self, compile_path='.', exclude=[], mode='f', delete=['b','p','c'], python_cmd="python"):
         """[summary]
 
         [description]
@@ -105,6 +105,7 @@ class AutoCython():
         # 注意源代码里不要有build文件夹
         self._setup_file_str = '#!/use/bin/dev python\n# -*- coding: utf-8 -*-\nfrom distutils.core import setup\nfrom Cython.Build import cythonize\nsetup(ext_modules = cythonize("{0}"))'
         self._Popen_cmd = 'python {0} build_ext --inplace'
+        self._Popen_cmd = self._Popen_cmd.replace("python", python_cmd)
 
     def _fitter_path(self, path : str) -> str:
         """ 让一个路径的分隔符统一为当前系统下的 """
@@ -475,7 +476,7 @@ class AC_getopt_argv():
             ac.compile_file(self.file_path, wait=True, delete=self.delete, complicating=False)
             sys.exit()
 
-        return self.compile_path, self.exclude, self.mode, self.delete
+        return self.compile_path, self.exclude, self.mode, self.delete, self.python_cmd
 
 if __name__ == '__main__':
     """ CMD """
