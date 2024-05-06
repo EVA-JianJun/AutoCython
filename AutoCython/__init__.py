@@ -3,7 +3,7 @@
 import sys
 from AutoCython.AutoCython import AutoCython, AC_getopt_argv
 
-__version__ = "1.3.3"
+__version__ = "1.3.4"
 
 class MyModuleCall(sys.modules[__name__].__class__):
     # module call

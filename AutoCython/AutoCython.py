@@ -229,11 +229,6 @@ class AutoCython():
                 delete_tmp_file_th = Thread(target=delete_tmp_file, args=(cython_popen, dirname, filename, setup_file, delete, complicating))
                 delete_tmp_file_th.start()
 
-            if wait:
-                cython_popen.wait()
-                if not complicating and os.path.isfile(os.path.join(dirname, "___init__.py")):
-                    os.rename(os.path.join(dirname, "___init__.py"), os.path.join(dirname, "__init__.py"))
-
             if not complicating and cython_popen.wait() != 0:
                 # 错误是输出
                 err_po = Popen_out(cython_popen, file_path)
@@ -249,6 +244,11 @@ class AutoCython():
             traceback.print_exc()
             print(err)
             return None
+        finally:
+            if wait:
+                cython_popen.wait()
+                if not complicating and os.path.isfile(os.path.join(dirname, "___init__.py")):
+                    os.rename(os.path.join(dirname, "___init__.py"), os.path.join(dirname, "__init__.py"))
 
     def compile(self, wait=True, delete=[], log=True) -> None:
         """ 编译所有文件 """
