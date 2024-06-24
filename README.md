@@ -92,7 +92,7 @@ Cython 不支持 print 函数的 end 参数, 可以在外部定义 `def my_print
 2. 20221123 可以通过文件头手动指定不编译的文件
 3. 20230306 更新可以指定命令行头如 `Python310` 以此支持非Widnows系统下编译
 4. 20230324 更新文档
-5. 20240506 修复编译失败时遗漏复原 __init__.py 的问题
+5. 20240506 修复编译失败时遗漏复原 \_\_init\_\_.py 的问题
 
   [1]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png
   [2]: https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20200316_2.jpg
