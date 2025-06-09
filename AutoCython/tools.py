@@ -127,8 +127,7 @@ def parse_arguments():
 
     return args
 
-def show_not_find_file():
-    # 获取系统语言
+def show_path_not_find_file(path):
     try:
         sys_language, _ = locale.getdefaultlocale()
         lang = 'zh' if sys_language and sys_language.startswith('zh') else 'en'
@@ -136,9 +135,33 @@ def show_not_find_file():
         lang = 'en'  # 异常时默认英文
 
     if lang == 'zh':
-        print("没有找到任何需要编译的文件!")
+        print(f"{path} 目录下没有任何需要编译的文件!")
     else:
-        print("No files found that need to be compiled!")
+        print(f"The {path} directory does not contain any files that need to be compiled!")
+
+def show_file_find_file(file):
+    try:
+        sys_language, _ = locale.getdefaultlocale()
+        lang = 'zh' if sys_language and sys_language.startswith('zh') else 'en'
+    except Exception:
+        lang = 'en'  # 异常时默认英文
+
+    if lang == 'zh':
+        print(f"文件 {file} 不存在!")
+    else:
+        print(f"File {file} does not exist!")
+
+def show_path_find_file(path):
+    try:
+        sys_language, _ = locale.getdefaultlocale()
+        lang = 'zh' if sys_language and sys_language.startswith('zh') else 'en'
+    except Exception:
+        lang = 'en'  # 异常时默认英文
+
+    if lang == 'zh':
+        print(f"路径 {path} 不存在!")
+    else:
+        print(f"Path {path} does not exist!")
 
 if __name__ == "__main__":
     args = parse_arguments()
