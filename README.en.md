@@ -1,17 +1,17 @@
-# AutoCython
+# AutoCython V2
 [中文](https://github.com/EVA-JianJun/AutoCython/blob/master/README.md) | English
 
 **AutoCython: Batch Compile Python Files to PYD Files with One Click**
 ![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png)
 
-## ✨ Key Features
+## ✨ Features
 - Single-file/Multi-file batch compilation
 - Cross-platform support (Windows/Linux/MacOS)
 - Clean command-line interface
 
 ## 📦 Installation
 ```bash
-pip install AutoCython-jianjun
+pip install -U AutoCython-jianjun
 ```
 
 ## ⚙️ Dependencies

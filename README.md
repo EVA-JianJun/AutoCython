@@ -1,17 +1,17 @@
-# AutoCython
+# AutoCython V2
 中文 | [English](https://github.com/EVA-JianJun/AutoCython/blob/master/README.en.md)
 
 **自动 Cython：一键将 Python 文件批量编译为 PYD 文件**
 ![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png)
 
-## ✨ 特性亮点
+## ✨ 特性
 - 单文件/多文件批量编译
 - 跨平台支持 (Windows/Linux/MacOS)
 - 简洁命令行界面
 
 ## 📦 安装
 ```bash
-pip install AutoCython-jianjun
+pip install -U AutoCython-jianjun
 ```
 
 ## ⚙️ 依赖环境
