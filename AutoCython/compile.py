@@ -55,8 +55,6 @@ from Cython.Build import cythonize
 # 编译器指令
 compiler_directives = {{
     'language_level': '3',
-    'cdivision': True,
-    'boundscheck': False
 }}
 
 setup(

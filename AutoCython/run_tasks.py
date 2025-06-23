@@ -1,5 +1,6 @@
 import time
 import locale
+import platform
 import threading
 import concurrent.futures
 from rich.live import Live
@@ -23,8 +24,11 @@ def run_tasks(task_list, max_workers=2, language=None):
 ███████║██║   ██║   ██║   ██║   ██║██║      ╚████╔╝    ██║   ███████║██║   ██║██╔██╗ ██║
 ██╔══██║██║   ██║   ██║   ██║   ██║██║       ╚██╔╝     ██║   ██╔══██║██║   ██║██║╚██╗██║
 ██║  ██║╚██████╔╝   ██║   ╚██████╔╝╚██████╗   ██║      ██║   ██║  ██║╚██████╔╝██║ ╚████║
-╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-                                                                                        """)
+╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝""")
+
+    bit_architecture = platform.architecture()[0]  # 获取位数信息，例如 '64bit' 或 '32bit'
+    print(f"{platform.system()} {platform.version()} {platform.machine()} | {platform.python_implementation()} {platform.python_version()} {platform.python_compiler()} | {bit_architecture}")
+
     # 获取系统默认区域设置
     try:
         sys_language, _ = locale.getdefaultlocale()
