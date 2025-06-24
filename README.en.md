@@ -1,8 +1,8 @@
 # AutoCython V2
 [中文](https://github.com/EVA-JianJun/AutoCython/blob/master/README.md) | English
 
-**AutoCython: Batch Compile Python Files to PYD Files with One Click**
-![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png)
+**AutoCython: Batch Compile Python Files to `PYD / SO` Files with One Click**
+![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20250623.png)
 
 ## ✨ Features
 - Single-file/Multi-file batch compilation
@@ -56,7 +56,8 @@ Consult [Cython Wiki](https://github.com/cython/cython/wiki) official documentat
 
 ## 📅 Changelog
 ### V2 Releases
-1. 20250609 release V2.0.0: Codebase refactored with new UI
+1. 20250623 release V2.1.0: Disables aggressive performance optimization options. Display system information.
+2. 20250609 release V2.0.0: Codebase refactored with new UI (insecure version)
 
 ### V1 Releases
 1. 20220613: Added Linux support (requires gcc & g++ configuration)

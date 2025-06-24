@@ -62,7 +62,7 @@ def parse_arguments():
             'del_help': 'Remove source code after compilation (default: False)',
             'help_help': 'Show help message',
             'version_help': 'Show program version',
-            'version_text': 'v2.0.0',
+            'version_text': 'v2.1.0',
             'required_error': 'The following arguments are required: {}',
             'epilog': 'Example:\n   AutoCython -f demo.py\n   AutoCython -p path'
         },
@@ -74,7 +74,7 @@ def parse_arguments():
             'del_help': '编译后删除源代码（默认：False）',
             'help_help': '显示帮助信息',
             'version_help': '显示程序版本',
-            'version_text': 'v2.0.0',
+            'version_text': 'v2.1.0',
             'required_error': '缺少必要参数: {}',
             'epilog': '示例:\n   AutoCython -f demo.py\n   AutoCython -p path'
         }

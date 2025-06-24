@@ -1,8 +1,8 @@
 # AutoCython V2
 中文 | [English](https://github.com/EVA-JianJun/AutoCython/blob/master/README.en.md)
 
-**自动 Cython：一键将 Python 文件批量编译为 PYD 文件**
-![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20210824.png)
+**自动 Cython：一键将 Python 文件批量编译为 `PYD / SO` 文件**
+![py_pyd](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20250623.png)
 
 ## ✨ 特性
 - 单文件/多文件批量编译
@@ -56,7 +56,8 @@ AutoCython -d True -p D:/python_code/ProjectPath
 
 ## 📅 更新记录
 ### V2 版本
-1. 20250609 release V2.0.0 重构了代码, 使用新的界面
+1. 20250623 release V2.1.0 禁用激进的性能优化选项. 显示系统信息.
+2. 20250609 release V2.0.0 重构了代码, 使用新的界面 (不安全版本)
 
 ### V1 版本
 1. 20220613 更新对Linux的支持, Linux下需要配置gcc&g++
