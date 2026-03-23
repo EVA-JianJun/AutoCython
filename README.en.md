@@ -43,7 +43,7 @@ AutoCython -d True -p D:/python_code/ProjectPath
 ![AutoCython GUI](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20250609_4.png)
 
 ### Manually Exclude Files from Compilation
-Add declaration in the **first two lines** of file header:
+Add the `AutoCython No Compile` declaration to any of the **first two lines** at the top of the file:
 ```python
 # AutoCython No Compile
 # This file will be skipped during compilation
@@ -56,8 +56,9 @@ Consult [Cython Wiki](https://github.com/cython/cython/wiki) official documentat
 
 ## 📅 Changelog
 ### V2 Releases
-1. 20250623 release V2.1.0: Disables aggressive performance optimization options. Display system information.
-2. 20250609 release V2.0.0: Codebase refactored with new UI (insecure version)
+1. 20250609 release V2.0.0: Codebase refactored with new UI (insecure version)
+2. 20250623 release V2.1.0: Disables aggressive performance optimization options. Display system information.
+3. 20260323 release V2.1.1 Fixed a typo in the `AutoCython No Compile` declaration.
 
 ### V1 Releases
 1. 20220613: Added Linux support (requires gcc & g++ configuration)

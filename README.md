@@ -43,7 +43,7 @@ AutoCython -d True -p D:/python_code/ProjectPath
 ![AutoCython GUI](https://raw.githubusercontent.com/EVA-JianJun/GitPigBed/master/blog_files/img/AutoCython_20250609_2.png)
 
 ### 手动排除文件不编译
-在文件头部 **前两行** 添加声明：
+在文件头部 **前两行** 的任意一行添加 `AutoCython No Compile` 声明：
 ```python
 # AutoCython No Compile
 # 此文件将跳过编译处理
@@ -56,8 +56,9 @@ AutoCython -d True -p D:/python_code/ProjectPath
 
 ## 📅 更新记录
 ### V2 版本
-1. 20250623 release V2.1.0 禁用激进的性能优化选项. 显示系统信息.
-2. 20250609 release V2.0.0 重构了代码, 使用新的界面 (不安全版本)
+1. 20250609 release V2.0.0 重构了代码, 使用新的界面 (不安全版本)
+2. 20250623 release V2.1.0 禁用激进的性能优化选项. 显示系统信息.
+3. 20260323 release V2.1.1 修复不编译声明 `AutoCython No Compile` 拼写错误.
 
 ### V1 版本
 1. 20220613 更新对Linux的支持, Linux下需要配置gcc&g++
